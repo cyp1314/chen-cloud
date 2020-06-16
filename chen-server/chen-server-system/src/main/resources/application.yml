@@ -1,0 +1,49 @@
+server:
+  port: 8201
+
+spring:
+  application:
+    name: chen-server-system
+  datasource:
+    dynamic:
+      hikari:
+        connection-timeout: 30000
+        max-lifetime: 1800000
+        max-pool-size: 15
+        min-idle: 5
+        connection-test-query: select 1
+        pool-name: FebsHikariCP
+      primary: base
+      datasource:
+        base:
+          username: root
+          password: root
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/cloud_base?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
+      p6spy: true
+
+mybatis-plus:
+  type-aliases-package: com.chen.common.entity.db.system
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    jdbc-type-for-null: null
+  global-config:
+    banner: false
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 20
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    instance-info-replication-interval-seconds: 30
+    serviceUrl:
+      defaultZone: http://admin:123456@localhost:8001/register/eureka/
+
+
+security:
+  oauth2:
+    resource:
+      id: ${spring.application.name}
+      user-info-uri: http://localhost:8301/auth/user
+
